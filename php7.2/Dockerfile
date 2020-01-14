@@ -139,8 +139,9 @@ extension="geoip.so"\n\
 " >> /usr/local/php${PHP_VERSION}/lib/php.ini
 
 # start script for init log and provide complex start commands.
-RUN echo -e " \n\
-mkdir /usr/local/php${PHP_VERSION}/var/log \n\
+RUN echo  " \n\
+set -x \n\
+mkdir -pv /usr/local/php${PHP_VERSION}/var/log \n\
 touch /usr/local/php${PHP_VERSION}/var/log/php-fpm.log\n\
 /usr/local/php${PHP_VERSION}/sbin/php-fpm --nodaemonize --fpm-config /usr/local/php${PHP_VERSION}/etc/php-fpm.conf\n\
 " >> /start.sh && \
@@ -154,5 +155,5 @@ RUN cd / && \
 
 WORKDIR /
 # CMD
-ENTRYPOINT ["/start.sh"]
+CMD  ["/bin/sh","-c","/start.sh"]
 
