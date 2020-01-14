@@ -1,0 +1,48 @@
+ 1031  cp wordpress-5.3.2.tar.gz /opt/nginx/html/
+ 1032  cd /opt/nginx/html/
+ 1033  tar xf wordpress-5.3.2.tar.gz 
+ 1034  cd wordpress/
+ 1041  find . -name '*.html'
+ 1043  cd ..
+ 1045  ln -sv wordpress blog
+
+全是php，不存在静态文件, 
+访问 http://myapp.mykernel.cn:8083/blog/ 
+File not found. 并且可以在php后端的访问日志可以看到47.101.51.165 -  15/Jan/2020:00:31:22 +0800 "GET /blog/index.php" 404
+
+所以wordpress应该布署在php的站点目录中
+cd /opt/nginx/html/
+rm -rf ./*
+
+
+
+
+现在我们切换到php server
+
+cd /opt/myphpsrc
+  tar xf wordpress-5.3.2.tar.gz
+  ln -sv wordpress blog
+
+在次尝试访问
+http://myapp.mykernel.cn:8083/blog/        响应404 原因是匹配到/
+http://myapp.mykernel.cn:8083/blog/index.php 原因匹配到\.php$ 所以才找后端php
+
+响应500, 估计是权限问题
+docker kill 0b6a54a6a88b       # 先kill掉 php-ubuntu:v3  启动的容器, 而后重启即可以解决权限问题
+docker run -it --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/myphpsrc:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/v:/usr/local/php7.2.25/var/ -p 81:9000 php-ubuntu:v3 
+
+
+跳过这步的访问
+官方说https://wordpress.org/support/article/how-to-install-wordpress/
+先访问http://example.com/blog/wp-admin/install.php
+可以发现没有样式: F12打开看 blog/wp-includes/css/ /blog/wp-includes/js/ 
+这些静态文件可以“缓存”, 所以非php结尾的应由nginx访问, nginx能访问，资源就应该在nginx root目录下。所以我们将提供静态文件给nginx的root目录 
+   1004  cd /opt/nginx/html/
+   1005  tar xf wordpress-5.3.2.tar.gz 
+   1007  find wordpress/ -name "*.php" -exec rm -rf {} \;
+   ln -sv wordpress blog
+
+再次访问http://example.com/blog/wp-admin/install.php, 样式正常
+
+我们一提交就显示网关超时, 但是后端已经显示200
+

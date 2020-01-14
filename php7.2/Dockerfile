@@ -3,7 +3,7 @@ LABEL maintainer="<slc> 1062670898@qq.com "
 
 ENV PHP_VERSION 7.2.25
 ENV LISTEN_PORT 9000
-ENV RUN_AS_USER pxr
+ENV RUN_AS_USER www
 
 RUN rm /var/lib/apt/lists/* -vf && \
 	apt-get clean && \
@@ -69,7 +69,10 @@ RUN cd php-${PHP_VERSION} && \cp php.ini-production /usr/local/php${PHP_VERSION}
 	cd /usr/local/php${PHP_VERSION}/etc/ && \
 	cp php-fpm.conf.default php-fpm.conf && \ 
 	cp php-fpm.d/www.conf.default php-fpm.d/www.conf && \
-	sed -i 's@listen = .*@listen = 0.0.0.0:${LISTEN_PORT}@' /usr/local/php${PHP_VERSION}/etc/php-fpm.d/www.conf
+	sed -i 's@listen = .*@listen = 0.0.0.0:${LISTEN_PORT}@' /usr/local/php${PHP_VERSION}/etc/php-fpm.d/www.conf && \
+	sed -i '$a access.log = var/log/www.access.log' /usr/local/php${PHP_VERSION}/etc/php-fpm.d/www.conf && \
+        sed -i 'a slowlog = var/log/www.log.slow' /usr/local/php${PHP_VERSION}/etc/php-fpm.d/www.conf 
+
 
 
 # parameters
@@ -139,13 +142,21 @@ extension="geoip.so"\n\
 " >> /usr/local/php${PHP_VERSION}/lib/php.ini
 
 # start script for init log and provide complex start commands.
-RUN echo  " \n\
+RUN  echo '#!/bin/bash' >> /start.sh && \
+echo  " \n\
 set -x \n\
+
+# change dynamic sources owner \n\
+chown -R ${RUN_AS_USER}:${RUN_AS_USER} \${WEBROOT} \n\
 mkdir -pv /usr/local/php${PHP_VERSION}/var/log \n\
 touch /usr/local/php${PHP_VERSION}/var/log/php-fpm.log\n\
+touch /usr/local/php${PHP_VERSION}/var/log/www.access.log\n\
 /usr/local/php${PHP_VERSION}/sbin/php-fpm --nodaemonize --fpm-config /usr/local/php${PHP_VERSION}/etc/php-fpm.conf\n\
 " >> /start.sh && \
 chmod +x /start.sh
+
+
+
 
 # clean
 RUN cd / && \
@@ -154,6 +165,7 @@ RUN cd / && \
 
 
 WORKDIR /
+ENV PATH=$PATH:/
 # CMD
-CMD  ["/bin/sh","-c","/start.sh"]
+CMD  ["start.sh"]
 
