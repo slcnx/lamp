@@ -16,7 +16,7 @@ pkg-config zlib1g-dev \
 libwebp-dev  libjpeg-turbo8-dev libpng-dev \
 wget
 
-RUN useradd -s /sbin/nologin -M ${RUN_AS_USER} && \
+RUN useradd -r -s /sbin/nologin -M ${RUN_AS_USER} && \
 	wget  https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz && \
 	tar xf php-${PHP_VERSION}.tar.xz && \
 	cd php-${PHP_VERSION} && \
