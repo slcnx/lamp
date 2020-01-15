@@ -7,6 +7,8 @@ apache mysql php
   - start deamon process.
 
 # docker构建后并后台运行
+后台运行--rm并不影响停止时清空数据，因为可变的数据已经输出来了, 在输出目录下不会因为删容器， 数据丢失。
+但是我们仍需要进行备份：网站数据(上传的静态文件)；mysql数据
   ## nginx:
     cd nginx
     docker build -t  nginx:php-fpm7.2 ./
