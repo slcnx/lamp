@@ -43,29 +43,30 @@ apache mysql php
        docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 ubuntu:php-fpm7.2-plugins
 
   
-  以后修改配置时，或增加功能时, 进入构建目录, 
-    1）基于Dockerfile文件, 直接添加在文件后
-    2）基于Dockerfile文件, 先构建出基础镜像，第二个Dockerfile FROM 构建的镜像,
+## 以后修改配置时，或增加功能时, 进入构建目录, 
 
+- 基于Dockerfile文件, 直接添加在文件后
+- 基于Dockerfile文件, 先构建出基础镜像，第二个Dockerfile FROM 构建的镜像,
 
-  以上这样配置，通过容器nginx的端口8083可以访问。 为了方便的域名访问，可以在宿主机上反向代理至容器。
+## 以上这样配置，通过容器nginx的端口8083可以访问。 为了方便的域名访问，可以在宿主机上反向代理至容器。
 
- 
-  补充：如果你启动时需要换路径或端口，应当明确
-    1）有关联性的配置
-      docker run nginx 
-          -v /opt/nginx/html/:/usr/share/nginx/html/ 前面路径同php-fpm前面路径
-      docker run ubuntu:php-fpm
-          -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ 前面路径同nginx前面路径, WEBROOT同后面路径
-          -p 9008:9000  更改前面的端口需要重新制作nginx， Dockerfile中引用的配置文件中proxy_pass facgi指定的端口需要和前面一致。               修改后面的端口需要重新制作php-fpm 
+## 如果你启动时需要换路径或端口，应当明确
 
+- 有关联性的配置
+```
+  docker run nginx 
+      -v /opt/nginx/html/:/usr/share/nginx/html/ 前面路径同php-fpm前面路径
+  docker run ubuntu:php-fpm
+      -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ 前面路径同nginx前面路径, WEBROOT同后面路径
+      -p 9008:9000  更改前面的端口需要重新制作nginx， Dockerfile中引用的配置文件中proxy_pass facgi指定的端口需要和前面一致。               修改后面的端口需要重新制作php-fpm 
+```
 
-    2）无关联性配置
-
-      docker run nginx 
-         -p 9008:9000 前面端口随便, 但是宿主机nginx反向代理时要代理至前面的端口9008
-      docker run ubuntu:php-fpm
-        -v /opt/php7/var:/usr/local/php/var/ 前面路径随意，后面编译时固定位置
-  
+- 无关联性配置
+```
+  docker run nginx 
+     -p 9008:9000 前面端口随便, 但是宿主机nginx反向代理时要代理至前面的端口9008
+  docker run ubuntu:php-fpm
+    -v /opt/php7/var:/usr/local/php/var/ 前面路径随意，后面编译时固定位置
+```
 
         
