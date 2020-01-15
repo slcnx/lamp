@@ -132,7 +132,7 @@ RUN apt-get install -y libgeoip-dev  && \
 	/usr/local/php${PHP_VERSION}/bin/pecl install geoip-1.1.1.tgz  
 
 # modudels
-RUN echo -e " \n\
+RUN echo  " \n\
 extension_dir = $(/usr/local/php${PHP_VERSION}/bin/php-config --extension-dir)\n\
 extension="redis.so"\n\
 extension="pdo_oci.so"\n\

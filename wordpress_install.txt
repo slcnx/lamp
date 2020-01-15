@@ -46,3 +46,9 @@ docker run -it --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/myphpsrc:/opt/m
 
 我们一提交就显示网关超时, 但是后端已经显示200
 
+MariaDB [(none)]> create database wordpress character set = utf8mb4;
+Query OK, 1 row affected (0.01 sec)
+
+MariaDB [(none)]> grant all on wordpress.* to 'wpuser'@'%' identified by 'wppass';
+Query OK, 0 rows affected (0.12 sec)
+
