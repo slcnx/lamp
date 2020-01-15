@@ -1,1 +1,4 @@
 openssl enc -d -aes-256-cbc -a -salt -out reinstall_wordpress.sh -in reinstall_wordpress.sh.ciphertext
+
+
+# 密码提示: 当前服务器密码
