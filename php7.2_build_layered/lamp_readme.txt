@@ -257,7 +257,7 @@ nginx -s reload
 
     2）有插件
        cd php7.2_build_layered
-       cat Dockerfile1 | docker build -t ubuntu:php-fpm7.2-plugins - || docker build -t ubuntu:php-fpm7.2-plugins -f Dockerfile1 ./
+       cat  Dockerfile-plugin | docker build -t ubuntu:php-fpm7.2-plugins - || docker build -t ubuntu:php-fpm7.2-plugins -f Dockerfile-plugin ./
        docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 ubuntu:php-fpm7.2-plugins
 
   
@@ -288,6 +288,21 @@ nginx -s reload
 
         
 
+
+lamp v2
+    cd nginx
+    docker build -t  nginx:php-fpm7.2 ./
+    docker run --rm -d -v /opt/nginx/html/:/usr/share/nginx/html/ -p 8083:80  nginx:php-fpm7.2
+
+  
+    1）没有插件
+     cd php7.2_build_layered
+     cat Dockerfile1-v2 | docker build -t ubuntu:php-fpm7.2-v2 - || docker build -t ubuntu:php-fpm7.2-v2 -f Dockerfile1-v2 ./
+    docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 ubuntu:php-fpm7.2-v2
+    2）有插件
+  cd php7.2_build_layered
+  cat  Dockerfile-plugin-v2 | docker build -t ubuntu:php-fpm7.2-plugins-v2 - || docker build -t ubuntu:php-fpm7.2-plugins-v2 -f Dockerfile-plugin-v2 ./
+  docker run  --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf  ubuntu:php-fpm7.2-plugins-v2
    
   
      
