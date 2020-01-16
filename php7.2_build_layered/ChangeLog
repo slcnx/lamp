@@ -1,0 +1,12 @@
+# Dockerfile1
+
+# Dockerfile1-plugins
+
+# Dockerfile1-v2
+# 因为mysql官网中介绍引入新的mysql配置文件通过include的文件
+	-v hostpathfile:container_conf.d_file.conf
+
+# 出现错误，使用php/Dockerfile构建镜像，相同参数启动这个php:v1
+docker build -t php:v1 ./
+
+
