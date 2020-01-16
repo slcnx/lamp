@@ -97,8 +97,8 @@ expose port: 9008
 
 plugins() {
 # true v2 plugins for pxr
-echo '--> docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/  -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf -p 9009:9000 ubuntu:php-fpm7.2-plugins-2'
-docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/  -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf -p 9009:9000 ubuntu:php-fpm7.2-plugins-2
+echo '--> docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/  -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf -p 9009:9000 ubuntu:php-fpm7.2-plugins-v2'
+docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/  -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf -p 9009:9000 ubuntu:php-fpm7.2-plugins-v2
 echo "
 documentroot: /alidata/
 expose port: 9008
