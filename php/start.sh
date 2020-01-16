@@ -1,0 +1,1 @@
+../php-rpm-debug.sh
