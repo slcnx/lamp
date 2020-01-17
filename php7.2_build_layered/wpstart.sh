@@ -47,7 +47,7 @@ pm.min_spare_servers = 10
 pm.max_requests = 2048
 pm.process_idle_timeout = 10s
 
-request_terminate_timeout = 120
+request_terminate_timeout = 600
 request_slowlog_timeout = 0
 
 pm.status_path = /php-fpm_status
@@ -67,8 +67,7 @@ fi
 
 base() {
 # true v2 base for wordpress
-echo "--> docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-v2"
-docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-v2
+docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-v3
 echo "
 documentroot: /opt/nginx/html/
 expose port: 9008
@@ -77,8 +76,7 @@ expose port: 9008
 
 plugins() {
 # true v2 plugins for wordpress
-echo "--> docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-plugins-v2"
-docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-plugins-v2
+docker run -d --rm  -v /etc/localtime:/etc/localtime:ro -v /opt/nginx/html/:/opt/myphpsrc -e WEBROOT=/opt/myphpsrc/ -v /opt/php7/var:/usr/local/php/var/ -p 9008:9000 -v /opt/php7/conf.d/xtra.conf:/usr/local/php/etc/php-fpm.d/xtra.conf ubuntu:php-fpm7.2-plugins-v3
 echo "
 documentroot: /opt/nginx/html/
 expose port: 9008

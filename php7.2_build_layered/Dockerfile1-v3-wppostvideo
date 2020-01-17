@@ -1,0 +1,96 @@
+FROM ubuntu
+
+ENV PHP_VERSION 7.2.25
+ENV RUN_AS_USER pxr
+
+# update
+RUN apt-get update && \
+apt-get  -y install autoconf build-essential curl libtool \
+libssl-dev libcurl4-openssl-dev libxml2-dev libreadline7 \
+libreadline-dev libzip-dev libzip4 nginx openssl \
+pkg-config zlib1g-dev \
+libwebp-dev  libjpeg-turbo8-dev libpng-dev libxpm-dev libfreetype6-dev \
+wget
+
+# download file
+RUN wget  https://www.php.net/distributions/php-${PHP_VERSION}.tar.xz 
+#COPY php-${PHP_VERSION}.tar.xz /
+
+# comiple
+RUN tar xf php-${PHP_VERSION}.tar.xz && \
+cd php-${PHP_VERSION} && \
+./configure --prefix=/usr/local/php${PHP_VERSION} \
+--enable-mysqlnd \
+--with-pdo-mysql \
+--with-pdo-mysql=mysqlnd \
+--with-mysqli=mysqlnd \
+--enable-bcmath \
+--enable-fpm \
+--with-fpm-user=${RUN_AS_USER} \
+--with-fpm-group=${RUN_AS_USER} \
+--enable-mbstring \
+--enable-phpdbg \
+--enable-shmop \
+--enable-zip \
+--with-libzip=/usr/lib/x86_64-linux-gnu \
+--with-zlib \
+--with-curl \
+--with-pear \
+--with-openssl \
+--enable-pcntl \
+--with-readline \
+--enable-static \
+--enable-inline-optimization \
+--enable-sockets \
+--enable-wddx \
+--enable-zip \
+--enable-calendar \
+--enable-bcmath \
+--enable-soap \
+--with-zlib \
+--with-iconv \
+--with-gd \
+--with-xmlrpc \
+--enable-mbstring \
+--with-curl \
+--enable-ftp \
+--disable-ipv6 \
+--disable-debug \
+--with-openssl \
+--disable-fileinfo \
+--with-mcrypt \
+--enable-maintainer-zts \
+--disable-fileinfo \
+--with-png-dir --with-jpeg-dir --with-webp-dir --with-freetype-dir --with-xpm-dir
+
+# make and make install
+RUN cd php-${PHP_VERSION} && make &&  make install
+
+# configration
+RUN useradd -m -r -s /sbin/nologin ${RUN_AS_USER}
+RUN ln -sv /usr/local/php${PHP_VERSION}/ /usr/local/php
+RUN cd php-${PHP_VERSION} && cp php.ini-production /usr/local/php/lib/php.ini && \
+cd /usr/local/php/etc/ && \
+cp php-fpm.conf.default php-fpm.conf
+
+
+RUN  sed -i '$a post_max_size = 100M\nmemory_limit = 512M\nerror_reporting = E_ERROR | E_PARSE\nupload_max_filesize = 100M\ndate.timezone = PRC\nsession.gc_maxlifetime = 28800\nmax_execution_time = 600s' /usr/local/php${PHP_VERSION}/lib/php.ini 
+
+# clean
+RUN rm -rf /php-${PHP_VERSION} && \
+apt-get remove -y git && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+# start script on / 
+RUN  echo '#!/bin/bash' >> /start.sh && \
+echo  " \n\
+set -x \n\
+chown -R ${RUN_AS_USER}:${RUN_AS_USER} \${WEBROOT} \n\
+mkdir -pv /usr/local/php/var/log \n\
+/usr/local/php/sbin/php-fpm --nodaemonize --fpm-config /usr/local/php/etc/php-fpm.conf\n\
+" >> /start.sh && \
+chmod +x /start.sh
+
+ENV PATH=/:$PATH
+
+CMD ["start.sh"]
