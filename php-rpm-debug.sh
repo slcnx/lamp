@@ -51,13 +51,13 @@ env[TMPDIR] = /tmp
 env[TEMP] = /tmp
 EOF
 
-docker  run --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/www/cakephp/ams/:/alidata/www/cakephp/ams/ -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/etc/php/7.2/fpm/pool.d/xtra.conf  -p 9009:9000 php:v1 php-fpm7.2 -F
+#docker  run --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/www/cakephp/ams/:/alidata/www/cakephp/ams/ -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/etc/php/7.2/fpm/pool.d/xtra.conf  -p 9009:9000 php:v1 php-fpm7.2 -F
 
 # curl 127.0.0.1:81 请求需要使用php-fpm的web网站 
 # 2504669952] [client 127.0.0.1:40479] AH01071: Got error 'PHP message: PHP Warning:  include(Cake/bootstrap.php): failed to open stream: No such file or directory in /alidata/www/cakephp/ams/webroot/index.php on line 100\nPHP message: PHP Warning:  include(): Failed opening 'Cake/bootstrap.php' for inclusion (include_path='/alidata/www/cakephp/lib:.:/usr/share/php') in /alidata/www/cakephp/ams/webroot/index.php on line 100\nPHP message: PHP Fatal error:  CakePHP core could not be found. Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php. It should point to the directory containing your /cake core directory and your /vendors root directory. in /alidata/www/cakephp/ams/webroot/index.php on line 109\n'
 # 挂载路径/alidata/www/cakephp/lib 这个路径是读不到的
 
-#docker  run --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/ -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/etc/php/7.2/fpm/pool.d/xtra.conf  -p 9009:9000 php:v1 php-fpm7.2 -F
+docker  run --rm  -v /etc/localtime:/etc/localtime:ro -v  /alidata/:/alidata/ -e WEBROOT=/alidata/www/cakephp/ams/ -v /opt/php7/var:/usr/local/php/var/ -v /opt/php7/conf.d/xtra.conf:/etc/php/7.2/fpm/pool.d/xtra.conf  -p 9009:9000 php:v1 php-fpm7.2 -F
 # curl 1270.0.1:81 正常了，就权限问题。所以编译安装的结果修改一下挂载路径
 
 
